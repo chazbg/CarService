@@ -335,7 +335,6 @@
     </Content>
     <Content Include="Views\Shared\Site.Master" />
     <Content Include="_AppStart.cshtml" />
-    <Content Include="Views\RepairCard\Index2.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
