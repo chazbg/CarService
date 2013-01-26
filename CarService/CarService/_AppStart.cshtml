@@ -1,0 +1,66 @@
+﻿@using System.Linq;
+@using CarService.DAL;
+@{
+     if (!WebSecurity.Initialized)
+    {
+        WebSecurity.InitializeDatabaseConnection("CarServiceEntities", "UserProfile", "UserId",
+                                                 "UserName", autoCreateTables: true);
+    }
+    
+     CarServiceEntities db = new CarServiceEntities();
+
+     if (!Roles.RoleExists("Administrator"))
+     {
+         Roles.CreateRole("Administrator");
+     }
+
+     if (!Roles.RoleExists("User"))
+     {
+         Roles.CreateRole("User");
+     }
+
+     if (!WebSecurity.UserExists("Admin"))
+     {
+         WebSecurity.CreateUserAndAccount(
+             "Admin",
+             "admin",
+             new
+             {
+                 FirstName = "Dian",
+                 LastName = "Nikolov",
+                 Email = "diannn@uni-sofia.bg",
+                 Activated = true
+             });
+     }
+
+     if (!Roles.GetRolesForUser("Admin").Contains("Administrator"))
+     {
+         Roles.AddUsersToRoles(new[] { "Admin" }, new[] { "Administrator" });
+     }
+
+     //var users = from u
+     //            in db.UserProfiles
+     //            where u.FirstName == "admin" || u.FirstName == "Admin"
+     //            select u;
+
+     //var employees = from e
+     //     in db.Employees
+     //     where e.FirstName == "N/A"
+     //     select e;
+
+     var emp = (from e in db.Employees
+                where e.FirstName == "N/A"
+                select e).FirstOrDefault();
+     
+     if (null == emp)
+     { 
+            Employee e = new Employee();
+            e.FirstName = "N/A";
+            e.LastName = "N/A";
+            e.UserId = (from u in db.UserProfiles
+                        where (u.UserName == "admin") || (u.UserName == "Admin")
+                        select u).FirstOrDefault().UserId;
+            db.Employees.Add(e);
+            db.SaveChanges();
+     }
+}

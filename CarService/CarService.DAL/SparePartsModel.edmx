@@ -1,0 +1,183 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="CarServiceModel1.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityContainer Name="CarServiceModel1StoreContainer">
+          <EntitySet Name="RepairCards" EntityType="CarServiceModel1.Store.RepairCards" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="SpareParts" EntityType="CarServiceModel1.Store.SpareParts" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="SparePartsList" EntityType="CarServiceModel1.Store.SparePartsList" store:Type="Tables" store:Schema="dbo" store:Name="SparePartsList">
+            <DefiningQuery>SELECT 
+      [SparePartsList].[PartId] AS [PartId], 
+      [SparePartsList].[Id] AS [Id]
+      FROM [dbo].[SparePartsList] AS [SparePartsList]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK_SparePartsList_RepairCards" Association="CarServiceModel1.Store.FK_SparePartsList_RepairCards">
+            <End Role="RepairCards" EntitySet="RepairCards" />
+            <End Role="SparePartsList" EntitySet="SparePartsList" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SparePartsList_SpareParts" Association="CarServiceModel1.Store.FK_SparePartsList_SpareParts">
+            <End Role="SpareParts" EntitySet="SpareParts" />
+            <End Role="SparePartsList" EntitySet="SparePartsList" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="RepairCards">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="EntryDate" Type="date" Nullable="false" />
+          <Property Name="RepairFinishDate" Type="date" />
+          <Property Name="EmployeeId" Type="int" Nullable="false" />
+          <Property Name="CarId" Type="int" Nullable="false" />
+          <Property Name="Description" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="PartsPrice" Type="money" Nullable="false" />
+          <Property Name="TotalPrice" Type="money" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SpareParts">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="PartName" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Price" Type="money" Nullable="false" />
+          <Property Name="Activated" Type="bit" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+      warning 6002: The table/view 'CarService.dbo.SparePartsList' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
+      -->
+        <EntityType Name="SparePartsList">
+          <Key>
+            <PropertyRef Name="PartId" />
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="PartId" Type="int" Nullable="false" />
+          <Property Name="Id" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_SparePartsList_RepairCards">
+          <End Role="RepairCards" Type="CarServiceModel1.Store.RepairCards" Multiplicity="1" />
+          <End Role="SparePartsList" Type="CarServiceModel1.Store.SparePartsList" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="RepairCards">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="SparePartsList">
+              <PropertyRef Name="PartId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SparePartsList_SpareParts">
+          <End Role="SpareParts" Type="CarServiceModel1.Store.SpareParts" Multiplicity="1" />
+          <End Role="SparePartsList" Type="CarServiceModel1.Store.SparePartsList" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SpareParts">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="SparePartsList">
+              <PropertyRef Name="Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="CarServiceModel1" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="CarServiceEntities1" p1:LazyLoadingEnabled="true">
+          <EntitySet Name="RepairCards" EntityType="CarServiceModel1.RepairCard" />
+          <EntitySet Name="SpareParts" EntityType="CarServiceModel1.SparePart" />
+          <AssociationSet Name="SparePartsList" Association="CarServiceModel1.SparePartsList">
+            <End Role="RepairCards" EntitySet="RepairCards" />
+            <End Role="SpareParts" EntitySet="SpareParts" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="RepairCard">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="EntryDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="RepairFinishDate" Type="DateTime" Precision="0" />
+          <Property Name="EmployeeId" Type="Int32" Nullable="false" />
+          <Property Name="CarId" Type="Int32" Nullable="false" />
+          <Property Name="Description" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="PartsPrice" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+          <Property Name="TotalPrice" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+          <NavigationProperty Name="SpareParts" Relationship="CarServiceModel1.SparePartsList" FromRole="RepairCards" ToRole="SpareParts" />
+        </EntityType>
+        <EntityType Name="SparePart">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="PartName" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="Price" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+          <Property Name="Activated" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="RepairCards" Relationship="CarServiceModel1.SparePartsList" FromRole="SpareParts" ToRole="RepairCards" />
+        </EntityType>
+        <Association Name="SparePartsList">
+          <End Role="RepairCards" Type="CarServiceModel1.RepairCard" Multiplicity="*" />
+          <End Role="SpareParts" Type="CarServiceModel1.SparePart" Multiplicity="*" />
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="CarServiceModel1StoreContainer" CdmEntityContainer="CarServiceEntities1">
+          <EntitySetMapping Name="RepairCards">
+            <EntityTypeMapping TypeName="CarServiceModel1.RepairCard">
+              <MappingFragment StoreEntitySet="RepairCards">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="EntryDate" ColumnName="EntryDate" />
+                <ScalarProperty Name="RepairFinishDate" ColumnName="RepairFinishDate" />
+                <ScalarProperty Name="EmployeeId" ColumnName="EmployeeId" />
+                <ScalarProperty Name="CarId" ColumnName="CarId" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="PartsPrice" ColumnName="PartsPrice" />
+                <ScalarProperty Name="TotalPrice" ColumnName="TotalPrice" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SpareParts">
+            <EntityTypeMapping TypeName="CarServiceModel1.SparePart">
+              <MappingFragment StoreEntitySet="SpareParts">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="PartName" ColumnName="PartName" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="Activated" ColumnName="Activated" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="SparePartsList" TypeName="CarServiceModel1.SparePartsList" StoreEntitySet="SparePartsList">
+            <EndProperty Name="RepairCards">
+              <ScalarProperty Name="Id" ColumnName="PartId" />
+            </EndProperty>
+            <EndProperty Name="SpareParts">
+              <ScalarProperty Name="Id" ColumnName="Id" />
+            </EndProperty>
+          </AssociationSetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="False" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

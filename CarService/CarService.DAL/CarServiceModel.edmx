@@ -1,0 +1,517 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="CarServiceModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityContainer Name="CarServiceModelStoreContainer">
+          <EntitySet Name="Cars" EntityType="CarServiceModel.Store.Cars" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Employees" EntityType="CarServiceModel.Store.Employees" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="RepairCards" EntityType="CarServiceModel.Store.RepairCards" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="SparePartRepairCards" EntityType="CarServiceModel.Store.SparePartRepairCards" store:Type="Tables" store:Schema="dbo" store:Name="SparePartRepairCards">
+            <DefiningQuery>SELECT 
+      [SparePartRepairCards].[SparePart_Id] AS [SparePart_Id], 
+      [SparePartRepairCards].[RepairCard_Id] AS [RepairCard_Id]
+      FROM [dbo].[SparePartRepairCards] AS [SparePartRepairCards]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="SpareParts" EntityType="CarServiceModel.Store.SpareParts" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="UserProfile" EntityType="CarServiceModel.Store.UserProfile" store:Type="Tables" Schema="dbo" />
+          <AssociationSet Name="FK_Cars_UserProfile" Association="CarServiceModel.Store.FK_Cars_UserProfile">
+            <End Role="UserProfile" EntitySet="UserProfile" />
+            <End Role="Cars" EntitySet="Cars" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Employees_UserProfile" Association="CarServiceModel.Store.FK_Employees_UserProfile">
+            <End Role="UserProfile" EntitySet="UserProfile" />
+            <End Role="Employees" EntitySet="Employees" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RepairCards_Cars" Association="CarServiceModel.Store.FK_RepairCards_Cars">
+            <End Role="Cars" EntitySet="Cars" />
+            <End Role="RepairCards" EntitySet="RepairCards" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RepairCards_Employees" Association="CarServiceModel.Store.FK_RepairCards_Employees">
+            <End Role="Employees" EntitySet="Employees" />
+            <End Role="RepairCards" EntitySet="RepairCards" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RepairCards_UserProfile" Association="CarServiceModel.Store.FK_RepairCards_UserProfile">
+            <End Role="UserProfile" EntitySet="UserProfile" />
+            <End Role="RepairCards" EntitySet="RepairCards" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SpareParts_UserProfile" Association="CarServiceModel.Store.FK_SpareParts_UserProfile">
+            <End Role="UserProfile" EntitySet="UserProfile" />
+            <End Role="SpareParts" EntitySet="SpareParts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SparePartsList_RepairCards" Association="CarServiceModel.Store.FK_SparePartsList_RepairCards">
+            <End Role="RepairCards" EntitySet="RepairCards" />
+            <End Role="SparePartRepairCards" EntitySet="SparePartRepairCards" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SparePartsList_SpareParts" Association="CarServiceModel.Store.FK_SparePartsList_SpareParts">
+            <End Role="SpareParts" EntitySet="SpareParts" />
+            <End Role="SparePartRepairCards" EntitySet="SparePartRepairCards" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Cars">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="RegistryNumber" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Brand" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Model" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Year" Type="int" Nullable="false" />
+          <Property Name="FrameNumber" Type="int" Nullable="false" />
+          <Property Name="EngineNumber" Type="int" Nullable="false" />
+          <Property Name="Color" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="EngineWorkVolume" Type="int" Nullable="false" />
+          <Property Name="Description" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Owner" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="PhoneNumber" Type="int" Nullable="false" />
+          <Property Name="UserId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Employees">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="FirstName" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="LastName" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="UserId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="RepairCards">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="EntryDate" Type="date" Nullable="false" />
+          <Property Name="RepairFinishDate" Type="date" />
+          <Property Name="EmployeeId" Type="int" Nullable="false" />
+          <Property Name="CarId" Type="int" Nullable="false" />
+          <Property Name="Description" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="PartsPrice" Type="money" Nullable="false" />
+          <Property Name="TotalPrice" Type="money" />
+          <Property Name="UserId" Type="int" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+      warning 6002: The table/view 'CarService.dbo.SparePartRepairCards' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
+      -->
+        <EntityType Name="SparePartRepairCards">
+          <Key>
+            <PropertyRef Name="SparePart_Id" />
+            <PropertyRef Name="RepairCard_Id" />
+          </Key>
+          <Property Name="SparePart_Id" Type="int" Nullable="false" />
+          <Property Name="RepairCard_Id" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SpareParts">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="PartName" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Price" Type="money" Nullable="false" />
+          <Property Name="Activated" Type="bit" Nullable="false" />
+          <Property Name="UserId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="UserProfile">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="UserId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="UserName" Type="nvarchar" Nullable="false" MaxLength="56" />
+          <Property Name="FirstName" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="LastName" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="Email" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="Activated" Type="bit" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Cars_UserProfile">
+          <End Role="UserProfile" Type="CarServiceModel.Store.UserProfile" Multiplicity="1" />
+          <End Role="Cars" Type="CarServiceModel.Store.Cars" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserProfile">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="Cars">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Employees_UserProfile">
+          <End Role="UserProfile" Type="CarServiceModel.Store.UserProfile" Multiplicity="1" />
+          <End Role="Employees" Type="CarServiceModel.Store.Employees" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserProfile">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="Employees">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RepairCards_Cars">
+          <End Role="Cars" Type="CarServiceModel.Store.Cars" Multiplicity="1" />
+          <End Role="RepairCards" Type="CarServiceModel.Store.RepairCards" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cars">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="RepairCards">
+              <PropertyRef Name="CarId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RepairCards_Employees">
+          <End Role="Employees" Type="CarServiceModel.Store.Employees" Multiplicity="1" />
+          <End Role="RepairCards" Type="CarServiceModel.Store.RepairCards" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employees">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="RepairCards">
+              <PropertyRef Name="EmployeeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RepairCards_UserProfile">
+          <End Role="UserProfile" Type="CarServiceModel.Store.UserProfile" Multiplicity="1" />
+          <End Role="RepairCards" Type="CarServiceModel.Store.RepairCards" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserProfile">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="RepairCards">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SpareParts_UserProfile">
+          <End Role="UserProfile" Type="CarServiceModel.Store.UserProfile" Multiplicity="1" />
+          <End Role="SpareParts" Type="CarServiceModel.Store.SpareParts" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserProfile">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="SpareParts">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SparePartsList_RepairCards">
+          <End Role="RepairCards" Type="CarServiceModel.Store.RepairCards" Multiplicity="1" />
+          <End Role="SparePartRepairCards" Type="CarServiceModel.Store.SparePartRepairCards" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="RepairCards">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="SparePartRepairCards">
+              <PropertyRef Name="RepairCard_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SparePartsList_SpareParts">
+          <End Role="SpareParts" Type="CarServiceModel.Store.SpareParts" Multiplicity="1" />
+          <End Role="SparePartRepairCards" Type="CarServiceModel.Store.SparePartRepairCards" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SpareParts">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="SparePartRepairCards">
+              <PropertyRef Name="SparePart_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="CarServiceModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="CarServiceEntities" p1:LazyLoadingEnabled="true">
+          <EntitySet Name="Cars" EntityType="CarServiceModel.Car" />
+          <EntitySet Name="Employees" EntityType="CarServiceModel.Employee" />
+          <EntitySet Name="RepairCards" EntityType="CarServiceModel.RepairCard" />
+          <EntitySet Name="SpareParts" EntityType="CarServiceModel.SparePart" />
+          <EntitySet Name="UserProfiles" EntityType="CarServiceModel.UserProfile" />
+          <AssociationSet Name="FK_Cars_UserProfile" Association="CarServiceModel.FK_Cars_UserProfile">
+            <End Role="UserProfile" EntitySet="UserProfiles" />
+            <End Role="Cars" EntitySet="Cars" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RepairCards_Cars" Association="CarServiceModel.FK_RepairCards_Cars">
+            <End Role="Cars" EntitySet="Cars" />
+            <End Role="RepairCards" EntitySet="RepairCards" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Employees_UserProfile" Association="CarServiceModel.FK_Employees_UserProfile">
+            <End Role="UserProfile" EntitySet="UserProfiles" />
+            <End Role="Employees" EntitySet="Employees" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RepairCards_Employees" Association="CarServiceModel.FK_RepairCards_Employees">
+            <End Role="Employees" EntitySet="Employees" />
+            <End Role="RepairCards" EntitySet="RepairCards" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RepairCards_UserProfile" Association="CarServiceModel.FK_RepairCards_UserProfile">
+            <End Role="UserProfile" EntitySet="UserProfiles" />
+            <End Role="RepairCards" EntitySet="RepairCards" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SpareParts_UserProfile" Association="CarServiceModel.FK_SpareParts_UserProfile">
+            <End Role="UserProfile" EntitySet="UserProfiles" />
+            <End Role="SpareParts" EntitySet="SpareParts" />
+          </AssociationSet>
+          <AssociationSet Name="SparePartRepairCards" Association="CarServiceModel.SparePartRepairCards">
+            <End Role="RepairCards" EntitySet="RepairCards" />
+            <End Role="SpareParts" EntitySet="SpareParts" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Car">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="RegistryNumber" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="Brand" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="Model" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="Year" Type="Int32" Nullable="false" />
+          <Property Name="FrameNumber" Type="Int32" Nullable="false" />
+          <Property Name="EngineNumber" Type="Int32" Nullable="false" />
+          <Property Name="Color" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="EngineWorkVolume" Type="Int32" Nullable="false" />
+          <Property Name="Description" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="Owner" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="PhoneNumber" Type="Int32" Nullable="false" />
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="UserProfile" Relationship="CarServiceModel.FK_Cars_UserProfile" FromRole="Cars" ToRole="UserProfile" />
+          <NavigationProperty Name="RepairCards" Relationship="CarServiceModel.FK_RepairCards_Cars" FromRole="Cars" ToRole="RepairCards" />
+        </EntityType>
+        <EntityType Name="Employee">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="FirstName" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="LastName" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="UserProfile" Relationship="CarServiceModel.FK_Employees_UserProfile" FromRole="Employees" ToRole="UserProfile" />
+          <NavigationProperty Name="RepairCards" Relationship="CarServiceModel.FK_RepairCards_Employees" FromRole="Employees" ToRole="RepairCards" />
+        </EntityType>
+        <EntityType Name="RepairCard">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="EntryDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="RepairFinishDate" Type="DateTime" Precision="0" />
+          <Property Name="EmployeeId" Type="Int32" Nullable="false" />
+          <Property Name="CarId" Type="Int32" Nullable="false" />
+          <Property Name="Description" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="PartsPrice" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+          <Property Name="TotalPrice" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Car" Relationship="CarServiceModel.FK_RepairCards_Cars" FromRole="RepairCards" ToRole="Cars" />
+          <NavigationProperty Name="Employee" Relationship="CarServiceModel.FK_RepairCards_Employees" FromRole="RepairCards" ToRole="Employees" />
+          <NavigationProperty Name="UserProfile" Relationship="CarServiceModel.FK_RepairCards_UserProfile" FromRole="RepairCards" ToRole="UserProfile" />
+          <NavigationProperty Name="SpareParts" Relationship="CarServiceModel.SparePartRepairCards" FromRole="RepairCards" ToRole="SpareParts" />
+        </EntityType>
+        <EntityType Name="SparePart">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="PartName" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="Price" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+          <Property Name="Activated" Type="Boolean" Nullable="false" />
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="UserProfile" Relationship="CarServiceModel.FK_SpareParts_UserProfile" FromRole="SpareParts" ToRole="UserProfile" />
+          <NavigationProperty Name="RepairCards" Relationship="CarServiceModel.SparePartRepairCards" FromRole="SpareParts" ToRole="RepairCards" />
+        </EntityType>
+        <EntityType Name="UserProfile">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="UserId" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="UserName" Type="String" Nullable="false" MaxLength="56" Unicode="true" FixedLength="false" />
+          <Property Name="FirstName" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="LastName" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="Email" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="Activated" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Cars" Relationship="CarServiceModel.FK_Cars_UserProfile" FromRole="UserProfile" ToRole="Cars" />
+          <NavigationProperty Name="Employees" Relationship="CarServiceModel.FK_Employees_UserProfile" FromRole="UserProfile" ToRole="Employees" />
+          <NavigationProperty Name="RepairCards" Relationship="CarServiceModel.FK_RepairCards_UserProfile" FromRole="UserProfile" ToRole="RepairCards" />
+          <NavigationProperty Name="SpareParts" Relationship="CarServiceModel.FK_SpareParts_UserProfile" FromRole="UserProfile" ToRole="SpareParts" />
+        </EntityType>
+        <Association Name="FK_Cars_UserProfile">
+          <End Role="UserProfile" Type="CarServiceModel.UserProfile" Multiplicity="1" />
+          <End Role="Cars" Type="CarServiceModel.Car" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserProfile">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="Cars">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RepairCards_Cars">
+          <End Role="Cars" Type="CarServiceModel.Car" Multiplicity="1" />
+          <End Role="RepairCards" Type="CarServiceModel.RepairCard" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cars">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="RepairCards">
+              <PropertyRef Name="CarId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Employees_UserProfile">
+          <End Role="UserProfile" Type="CarServiceModel.UserProfile" Multiplicity="1" />
+          <End Role="Employees" Type="CarServiceModel.Employee" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserProfile">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="Employees">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RepairCards_Employees">
+          <End Role="Employees" Type="CarServiceModel.Employee" Multiplicity="1" />
+          <End Role="RepairCards" Type="CarServiceModel.RepairCard" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employees">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="RepairCards">
+              <PropertyRef Name="EmployeeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RepairCards_UserProfile">
+          <End Role="UserProfile" Type="CarServiceModel.UserProfile" Multiplicity="1" />
+          <End Role="RepairCards" Type="CarServiceModel.RepairCard" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserProfile">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="RepairCards">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SpareParts_UserProfile">
+          <End Role="UserProfile" Type="CarServiceModel.UserProfile" Multiplicity="1" />
+          <End Role="SpareParts" Type="CarServiceModel.SparePart" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserProfile">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="SpareParts">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="SparePartRepairCards">
+          <End Role="RepairCards" Type="CarServiceModel.RepairCard" Multiplicity="*" />
+          <End Role="SpareParts" Type="CarServiceModel.SparePart" Multiplicity="*" />
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="CarServiceModelStoreContainer" CdmEntityContainer="CarServiceEntities">
+          <EntitySetMapping Name="Cars">
+            <EntityTypeMapping TypeName="CarServiceModel.Car">
+              <MappingFragment StoreEntitySet="Cars">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="RegistryNumber" ColumnName="RegistryNumber" />
+                <ScalarProperty Name="Brand" ColumnName="Brand" />
+                <ScalarProperty Name="Model" ColumnName="Model" />
+                <ScalarProperty Name="Year" ColumnName="Year" />
+                <ScalarProperty Name="FrameNumber" ColumnName="FrameNumber" />
+                <ScalarProperty Name="EngineNumber" ColumnName="EngineNumber" />
+                <ScalarProperty Name="Color" ColumnName="Color" />
+                <ScalarProperty Name="EngineWorkVolume" ColumnName="EngineWorkVolume" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Owner" ColumnName="Owner" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Employees">
+            <EntityTypeMapping TypeName="CarServiceModel.Employee">
+              <MappingFragment StoreEntitySet="Employees">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="RepairCards">
+            <EntityTypeMapping TypeName="CarServiceModel.RepairCard">
+              <MappingFragment StoreEntitySet="RepairCards">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="EntryDate" ColumnName="EntryDate" />
+                <ScalarProperty Name="RepairFinishDate" ColumnName="RepairFinishDate" />
+                <ScalarProperty Name="EmployeeId" ColumnName="EmployeeId" />
+                <ScalarProperty Name="CarId" ColumnName="CarId" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="PartsPrice" ColumnName="PartsPrice" />
+                <ScalarProperty Name="TotalPrice" ColumnName="TotalPrice" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SpareParts">
+            <EntityTypeMapping TypeName="CarServiceModel.SparePart">
+              <MappingFragment StoreEntitySet="SpareParts">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="PartName" ColumnName="PartName" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="Activated" ColumnName="Activated" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserProfiles">
+            <EntityTypeMapping TypeName="CarServiceModel.UserProfile">
+              <MappingFragment StoreEntitySet="UserProfile">
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Activated" ColumnName="Activated" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="SparePartRepairCards" TypeName="CarServiceModel.SparePartRepairCards" StoreEntitySet="SparePartRepairCards">
+            <EndProperty Name="RepairCards">
+              <ScalarProperty Name="Id" ColumnName="RepairCard_Id" />
+            </EndProperty>
+            <EndProperty Name="SpareParts">
+              <ScalarProperty Name="Id" ColumnName="SparePart_Id" />
+            </EndProperty>
+          </AssociationSetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="False" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
